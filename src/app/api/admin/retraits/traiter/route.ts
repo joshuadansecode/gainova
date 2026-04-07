@@ -30,7 +30,9 @@ export async function GET(req: NextRequest) {
 
   // Tenter le virement FedaPay
   try {
-    const fedapayRes = await fetch('https://api.fedapay.com/v1/payouts', {
+    const isSandbox = process.env.FEDAPAY_SECRET_KEY?.startsWith('sk_sandbox_')
+  const fedapayBase = isSandbox ? 'https://api.sandbox.fedapay.com' : 'https://api.fedapay.com'
+  const fedapayRes = await fetch(`${fedapayBase}/v1/payouts', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

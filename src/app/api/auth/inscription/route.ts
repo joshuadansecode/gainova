@@ -59,7 +59,10 @@ export async function POST(req: NextRequest) {
   }
 
   // Créer la transaction FedaPay
-  const fedapayRes = await fetch('https://api.fedapay.com/v1/transactions', {
+  const isSandbox = process.env.FEDAPAY_SECRET_KEY?.startsWith('sk_sandbox_')
+  const fedapayBase = isSandbox ? 'https://api.sandbox.fedapay.com' : 'https://api.fedapay.com'
+
+  const fedapayRes = await fetch(`${fedapayBase}/v1/transactions`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
